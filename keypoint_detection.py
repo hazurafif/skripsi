@@ -2,7 +2,7 @@ import mediapipe as mp
 import numpy as np
 import cv2
 
-mp_holistic = mp.solutions.holistic  # holistic model
+mp_hands = mp.solutions.hands  # hands model
 mp_drawing = mp.solutions.drawing_utils  # drawing utilities
 
 
@@ -16,13 +16,19 @@ def mediapipe_detection(image, model):
 
 
 def draw_landmarks(image, results):
-    mp_drawing.draw_landmarks(image, results.left_hand_landmarks, mp_holistic.HAND_CONNECTIONS)
-    mp_drawing.draw_landmarks(image, results.right_hand_landmarks, mp_holistic.HAND_CONNECTIONS)
+    # Get the list of detected hands
+    if results.multi_hand_landmarks:
+        for hand_landmarks in results.multi_hand_landmarks:
+            mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
 
 def extract_keypoints(results):
-    lh = np.array([[res.x, res.y, res.z] for res in
-                   results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21 * 3)
-    rh = np.array([[res.x, res.y, res.z] for res in
-                   results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21 * 3)
-    return np.concatenate([lh, rh])
+    # Initialize arrays to store the keypoints
+    handlandmark = np.zeros(21 * 3)
+    # Iterate through the detected hands and extract their keypoints
+    if results.multi_hand_landmarks:
+        for i in results.multi_hand_landmarks:
+            handlandmark = np.array([[res.x, res.y, res.z] for res in
+                                     i.landmark]).flatten()
+
+    return np.concatenate([handlandmark])

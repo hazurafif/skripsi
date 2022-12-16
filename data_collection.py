@@ -1,20 +1,21 @@
 import os
 
 import cv2
-import mediapipe as mp
 import numpy as np
 
-from keypoint_detection import draw_landmarks
+from keypoint_detection import draw_landmarks, mp_hands
 from keypoint_detection import extract_keypoints
 from keypoint_detection import mediapipe_detection
+from keras.utils import to_categorical
 
-mp_holistic = mp.solutions.holistic
-mp_drawing = mp.solutions.drawing_utils
-
-DATA_PATH = os.path.join('C:/Rafif/SKRIPSI/Proyek Skripsi - Pycharm/DATA')
-gestures = np.array(['butuh makan', 'butuh minum', 'butuh obat', 'butuh bantuan', 'butuh ke toilet'])
-no_sequence = 30
-sequence_length = 30
+DATA_PATH = os.path.join('C:/Rafif/SKRIPSI/Proyek Skripsi - Pycharm/DATA - backup')
+gestures = np.array(['pain or ill', 'nurse, call bell', 'toilet', 'change(that)', 'hot', 'doctor, nurse', 'lie down',
+                     'turn over', 'medication', 'frightened, worried', 'sit', 'wash', 'cold', 'food', 'drink',
+                     'teeth, dentures', 'fetch, need(that)', 'home', 'spectacles', 'book or magazine',
+                     'stop, finish(that)', 'yes, good', 'help me', 'no, bad'])
+no_sequence = 100
+sequence_length = 10
+start_folder = 0
 
 
 def collect_data():
@@ -40,26 +41,26 @@ def collect_data():
     cap = cv2.VideoCapture(0)
     cap.set(3, 800)
     cap.set(4, 600)
+
     # Set mediapipe model
-    with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+    with mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.5, min_tracking_confidence=0.5) as hands:
         for gesture in gestures:
-            for sequence in range(no_sequence):
+            for sequence in range(start_folder, start_folder + no_sequence):
                 for frame_num in range(sequence_length):
                     ret, frame = cap.read()
-                    image, results = mediapipe_detection(frame, holistic)
+                    image, results = mediapipe_detection(frame, hands)
+
                     draw_landmarks(image, results)
 
                     if frame_num == 0:
-                        cv2.putText(image, 'MULAI MENGAMBIL DATA', (300, 200),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (33, 245, 22), 2, cv2.LINE_AA)
                         cv2.putText(image, 'MENGAMBIL FRAME: {} VIDEO NOMOR: {}'.format(gesture, sequence), (10, 20),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (201, 141, 0), 1, cv2.LINE_AA)
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
                         cv2.imshow('Hand Gesture Recognition', image)
-                        cv2.waitKey(500)
+
 
                     else:
                         cv2.putText(image, 'MENGAMBIL FRAME {} VIDEO NOMOR: {}'.format(gesture, sequence), (10, 20),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (201, 141, 0), 1, cv2.LINE_AA)
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
                         cv2.imshow('Hand Gesture Recognition', image)
 
                     keypoints = extract_keypoints(results)
@@ -72,6 +73,23 @@ def collect_data():
         cap.release()
         cv2.destroyAllWindows()
     return
+
+
+def append_data():
+    label_map = {label: num for num, label in enumerate(gestures)}
+    # print(label_map)
+    sequences, labels = [], []
+    for gesture in gestures:
+        for sequence in range(no_sequence):
+            window = []
+            for frame_num in range(sequence_length):
+                res = np.load(os.path.join(DATA_PATH, gesture, str(sequence), "{}.npy".format(frame_num)))
+                window.append(res)
+            sequences.append(window)
+            labels.append(label_map[gesture])
+
+    return np.array(sequences), to_categorical(labels).astype(int)
+
 
 if __name__ == "__main__":
     collect_data()
