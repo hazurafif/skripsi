@@ -8,14 +8,14 @@ from keypoint_detection import extract_keypoints
 from keypoint_detection import mediapipe_detection
 from keras.utils import to_categorical
 
-DATA_PATH = os.path.join('C:/Rafif/SKRIPSI/Proyek Skripsi - Pycharm/DATA - backup')
-gestures = np.array(['pain or ill', 'nurse, call bell', 'toilet', 'change(that)', 'hot', 'doctor, nurse', 'lie down',
+DATA_PATH = os.path.join('C:/Rafif/SKRIPSI/Proyek Skripsi - Pycharm/DATA')
+gestures = np.array(['pain or ill', 'nurse, call bell', 'toilet', 'change that', 'hot', 'doctor, nurse', 'lie down',
                      'turn over', 'medication', 'frightened, worried', 'sit', 'wash', 'cold', 'food', 'drink',
-                     'teeth, dentures', 'fetch, need(that)', 'home', 'spectacles', 'book or magazine',
-                     'stop, finish(that)', 'yes, good', 'help me', 'no, bad'])
-no_sequence = 100
+                     'teeth, dentures', 'fetch, need that', 'home', 'spectacles', 'book or magazine',
+                     'stop, finish that', 'yes, good', 'help me', 'no, bad'])
+no_sequence = 30
 sequence_length = 10
-start_folder = 0
+start_folder = 190
 
 
 def collect_data():
@@ -76,11 +76,12 @@ def collect_data():
 
 
 def append_data():
+    no_sequences = 190
     label_map = {label: num for num, label in enumerate(gestures)}
     # print(label_map)
     sequences, labels = [], []
     for gesture in gestures:
-        for sequence in range(no_sequence):
+        for sequence in range(no_sequences):
             window = []
             for frame_num in range(sequence_length):
                 res = np.load(os.path.join(DATA_PATH, gesture, str(sequence), "{}.npy".format(frame_num)))

@@ -10,9 +10,6 @@ from keypoint_detection import draw_landmarks, extract_keypoints, mediapipe_dete
 from train import model
 
 
-model.load_weights('weights-coba.h5')
-
-
 def save_image(image):
     img_count = 0
     img_name = f'image_{img_count}.png'
@@ -33,9 +30,10 @@ def send_msg(caption, files):
 
 
 def main():
+    model.load_weights('best_model.h5')
     sequence = []
     predictions = []
-    threshold = 0.85
+    threshold = 0.7
     output_label_counter = 0
 
     caption = ['pasien membutuhkan makananan', 'pasien membutuhkan minuman', 'pasien membutuhkan obat-obatan',
@@ -55,13 +53,8 @@ def main():
 
             image, results = mediapipe_detection(frame, hands)
             if results.multi_hand_landmarks:
-
-                print(results)
-
                 draw_landmarks(image, results)
-
                 keypoints = extract_keypoints(results)
-                print(keypoints)
                 sequence.append(keypoints)
                 sequence = sequence[-10:]
 
@@ -69,16 +62,16 @@ def main():
                     res = model.predict(np.expand_dims(sequence, axis=0))[0]
                     output_label = np.argmax(res)
                     predictions.append(output_label)
-                    # print(keypoints)
+                    #print(keypoints)
                     print(gestures[output_label])
                     print(res[np.argmax(res)])
 
                     if res[np.argmax(res)] > threshold:
                         cv2.putText(image, gestures[np.argmax(res)], (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2,
-                                    cv2.LINE_AA)
+                                        cv2.LINE_AA)
                         pesan = cv2.putText(image, 'PESAN DIKIRIM', (250, 200),
                                             cv2.FONT_HERSHEY_SIMPLEX, 0.55, (33, 245, 22), 2, cv2.LINE_AA)
-                        #
+
                         # if output_label == 0:
                         #     output_label_counter += 1
                         #     if output_label_counter >= 30:
