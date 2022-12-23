@@ -13,9 +13,9 @@ gestures = np.array(['pain or ill', 'nurse, call bell', 'toilet', 'change that',
                      'turn over', 'medication', 'frightened, worried', 'sit', 'wash', 'cold', 'food', 'drink',
                      'teeth, dentures', 'fetch, need that', 'home', 'spectacles', 'book or magazine',
                      'stop, finish that', 'yes, good', 'help me', 'no, bad'])
-no_sequence = 30
+no_sequence = 15
 sequence_length = 10
-start_folder = 190
+start_folder = 0
 
 
 def collect_data():

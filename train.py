@@ -1,7 +1,6 @@
 import os
 import time
 
-import keras
 import numpy as np
 import seaborn as sns
 from keras import backend as K
@@ -10,7 +9,7 @@ from keras.callbacks import TensorBoard
 from keras.layers import LSTM, Dense
 from keras.models import Sequential
 from matplotlib import pyplot as plt
-from sklearn.metrics import confusion_matrix, multilabel_confusion_matrix
+from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 
 from data_collection import gestures, append_data
@@ -48,14 +47,14 @@ def train_model():
 
     # Create an EarlyStopping callback
     es_callback = [EarlyStopping(monitor='val_loss', patience=20),
-                   ModelCheckpoint(filepath='best_model.h5', monitor='val_loss', save_best_only=True)]
+                   ModelCheckpoint(filepath='best_model_2.h5', monitor='val_loss', save_best_only=True)]
 
     # Compile the model
     model.compile(optimizer='Adam', loss='categorical_crossentropy',
                   metrics=['categorical_accuracy', f1_m, precision_m, recall_m])
 
     # Train the model, using the EarlyStopping callback
-    history = model.fit(X_train, y_train, epochs=73, callbacks=[tb_callback],
+    history = model.fit(X_train, y_train, epochs=200, callbacks=[tb_callback, es_callback],
                         validation_data=(X_val, y_val))
 
     # Calculate the elapsed time

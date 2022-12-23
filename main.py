@@ -9,12 +9,6 @@ from data_collection import gestures
 from keypoint_detection import draw_landmarks, extract_keypoints, mediapipe_detection, mp_hands
 from train import model
 
-import cv2
-import numpy as np
-
-import cv2
-import numpy as np
-
 
 def visualize_prediction(image, prediction):
     y_offset = 30
@@ -69,7 +63,7 @@ def send_msg(caption, files):
 
 
 def main():
-    model.load_weights('best_model.h5')
+    model.load_weights('best_model_2.h5')
     sequence = []
     predictions = []
     threshold = 0.7
@@ -98,24 +92,18 @@ def main():
                     res = model.predict(np.expand_dims(sequence, axis=0))[0]
                     output_label = np.argmax(res)
                     predictions.append(output_label)
-                    prediction_result = model.predict(np.expand_dims(sequence, axis=0))[0]
-                    visualized_image = visualize_prediction(image, prediction_result)
-                    visualized_image
-                    # print(keypoints)
-                    # print(gestures[output_label])
-                    # print(res[np.argmax(res)])
+                    visualize_prediction(image,  res)
 
-                    # if res[np.argmax(res)] > threshold:
-                    #
-                    #     for label in range(24):
-                    #         if output_label == label:
-                    #             output_label_counter += 1
-                    #             if output_label_counter >= 50:
-                    #                 cv2.putText(image, 'PESAN DIKIRIM', (250, 200),
-                    #                             cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 0), 2, cv2.LINE_AA)
-                    #                 files = save_image(image)
-                    #                 send_msg(output_label + 1, files)
-                    #                 output_label_counter = 0
+                    if res[np.argmax(res)] > threshold:
+                        for label in range(24):
+                            if output_label == label:
+                                output_label_counter += 1
+                                if output_label_counter >= 50:
+                                    cv2.putText(image, 'PESAN DIKIRIM', (250, 200),
+                                                cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 0), 2, cv2.LINE_AA)
+                                    files = save_image(image)
+                                    send_msg(output_label + 1, files)
+                                    output_label_counter = 0
 
             end = time.time()
             totalTime = end - start

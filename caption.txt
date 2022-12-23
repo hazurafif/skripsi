@@ -1,0 +1,24 @@
+Saya kesakitan atau merasa sakit
+Bisakah Anda memanggil perawat dan membunyikan bel untuk saya
+Saya perlu menggunakan toilet. Bisakah Anda membantu saya ke sana?
+Bisakah Anda mengubah apa pun yang membuat saya tidak nyaman atau tertekan
+Saya merasa panas. Bisakah Anda menyesuaikan suhunya atau membawakan saya air untuk diminum?
+Bisakah Anda memanggilkan dokter atau perawat untuk saya? Saya butuh perhatian medis
+Saya merasa lemah dan perlu berbaring. Bisakah Anda membantu saya mendapatkan posisi yang nyaman?
+Bisakah Anda membantu saya membalik tempat tidur? Saya kesulitan bergerak sendiri
+Saya perlu minum obat. Bisakah Anda mengingatkan saya apa yang harus diminum dan membantu saya
+Saya merasa takut atau khawatir. Bisakah Anda tetap bersama saya dan menawarkan jaminan
+Saya perlu duduk sebentar. Bisakah Anda membantu saya duduk?
+Bisakah Anda membantu saya mencuci muka atau tangan? Saya merasa kotor atau lengket
+Aku merasa kedinginan. Bisakah kamu membawakanku selimut atau mengatur suhunya?
+Saya lapar. Bisakah Anda membawakan saya makanan?
+Saya haus. Bisakah Anda membawakan saya minum?
+Saya butuh bantuan dengan gigi atau gigi palsu saya. Bisakah Anda membantu saya menyikat, membersihkan, atau memakainya
+Saya membutuhkan sesuatu yang tidak terjangkau. Bisakah Anda mengambilkannya untuk saya
+Saya siap untuk pulang.Bisakah Anda membantu saya membuat pengaturan untuk meninggalkan rumah sakit atau fasilitas perawatan
+Saya membutuhkan kacamata saya. Bisakah Anda membantu saya menemukannya atau membawanya ke saya
+Saya ingin membaca buku atau majalah. Bisakah Anda membawakan saya satu untuk dinikmati
+Bisakah Anda menghentikan apa pun yang Anda lakukan dan selesaikan tugas itu nanti? Saya butuh istirahat atau privasi sekarang
+Ya, apa yang kamu lakukan itu bagus. Terima kasih atas bantuan dan dukungannya.
+Saya butuh bantuan. Bisakah Anda membantu saya dengan apa pun yang saya perjuangkan
+Tidak, apa yang Anda lakukan tidak membantu atau diinginkan. Bisakah Anda berhenti atau mencoba yang lain
