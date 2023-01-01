@@ -2,11 +2,12 @@ import time
 
 import cv2
 import numpy as np
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, send_from_directory
 
 from keypoint_detection import mp_hands, mediapipe_detection, draw_landmarks, extract_keypoints
-from main import save_image, send_msg, visualize_prediction
-from train import model
+from telegram_send import save_image, send_msg
+from vis_prediction import visualize_prediction
+from model import model
 
 app = Flask(__name__)
 
@@ -16,23 +17,8 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/user_manual')
-def user_manual():
-    return render_template('user_manual.html')
-
-
-@app.route('/feedback')
-def feedback():
-    return render_template('feedback.html')
-
-
-@app.route('/message_sent')
-def message_sent():
-    return render_template('message_sent.html')
-
-
 def gen():
-    model.load_weights('best_model_2.h5')
+    model.load_weights('skripsi.h5')
     sequence = []
     predictions = []
     threshold = 0.7
@@ -73,13 +59,13 @@ def gen():
                                     files = save_image(image)
                                     send_msg(output_label + 1, files)
                                     output_label_counter = 0
+                    else:
+                        output_label_counter = 0
 
             end = time.time()
             totalTime = end - start
 
             fps = 1 / totalTime
-            # print("FPS: ", fps)
-
             cv2.putText(image, f'FPS: {int(fps)}', (550, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2,
                         cv2.LINE_AA)
             frame = cv2.imencode('.jpg', image)[1].tobytes()
@@ -87,6 +73,11 @@ def gen():
             key = cv2.waitKey(20)
             if key == 27:
                 break
+
+
+@app.route('/templates/<filename>')
+def serve_image(filename):
+    return send_from_directory('templates', filename, mimetype='image/jpeg')
 
 
 @app.route('/video_feed')
