@@ -1,4 +1,4 @@
-﻿# skripsi-handrecognition
+﻿# skripsi
 
 install requirement
 
